@@ -1,0 +1,525 @@
+#!/bin/bash
+
+################################################
+#
+# Compile FILES SCRIPT by MIUIAndroid.com
+#
+################################################
+
+# Define XML Repository folder e.g. xml_sources_nl
+xmlsource="xml_sources"
+
+device=$1
+release=$2
+packrel=$3
+
+working_folder="$device"_"$release"
+basefolder="$working_folder"_files
+destfolder="$device"_"$release"_apks
+
+# Optimise the packager to deal with the apks for each device properly so we can reduce FC errors on compiles
+if [ $device == "N1" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk FM.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk framework-res.apk)
+
+elif [ $device == "HD2" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk FM.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk framework-res.apk)
+
+elif [ $device == "Defy" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk FM.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk framework-res.apk)
+
+elif [ $device == "Desire" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk FM.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk framework-res.apk)
+
+elif [ $device == "DHD" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk FM.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk framework-res.apk)
+
+elif [ $device == "DesireZ" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk FM.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk framework-res.apk)
+
+elif [ $device == "Captivate" ] # (no torch)
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Updater.apk framework-res.apk)
+
+elif [ $device == "I9000" ] # (no torch)
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Updater.apk framework-res.apk)
+
+elif [ $device == "Milestone" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk framework-res.apk)
+
+elif [ $device == "NS" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk framework-res.apk)
+
+elif [ $device == "Optimus2x" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk framework-res.apk)
+
+elif [ $device == "mione" ]
+then
+ 
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk framework-res.apk)
+
+
+elif [ $device == "Vibrant" ] # (no torch)
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Updater.apk framework-res.apk)
+
+fi
+
+# Set i as apklist
+for i in "${apklist[@]}"
+		    do
+
+if [ $device == "Defy" ]
+then
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/FM_defy/res/* /home/miuiandroid/public_html/rom-dev/output/build/$basefolder/FM.apk/res/
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/${i}/res/* /home/miuiandroid/public_html/rom-dev/output/build/$basefolder/${i}/res/
+elif [ $device == "Desire" ]
+then
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/FM_htc/res/* /home/miuiandroid/public_html/rom-dev/output/build/$build/$basefolder/FM.apk/res/
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/${i}/res/* /home/miuiandroid/public_html/rom-dev/output/build/$basefolder/${i}/res/
+elif [ $device == "DesireZ" ]
+then
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/FM_htc/res/* /home/miuiandroid/public_html/rom-dev/output/build/$build/$basefolder/FM.apk/res/
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/${i}/res/* /home/miuiandroid/public_html/rom-dev/output/build/$basefolder/${i}/res/
+elif [ $device == "DHD" ]
+then
+echo Copying FM English to build folder...
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/FM_htc/res/* /home/miuiandroid/public_html/rom-dev/output/build/$build/$basefolder/FM.apk/res/
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/${i}/res/* /home/miuiandroid/public_html/rom-dev/output/build/$basefolder/${i}/res/
+elif [ $device == "HD2" ]
+then
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/FM_htc/res/* /home/miuiandroid/public_html/rom-dev/output/build/$build/$basefolder/FM.apk/res/
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/${i}/res/* /home/miuiandroid/public_html/rom-dev/output/build/$basefolder/${i}/res/
+elif [ $device == "N1" ]
+then
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/FM_htc/res/* /home/miuiandroid/public_html/rom-dev/output/build/$build/$basefolder/FM.apk/res/
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/${i}/res/* /home/miuiandroid/public_html/rom-dev/output/build/$basefolder/${i}/res/
+else
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/${i}/res/* /home/miuiandroid/public_html/rom-dev/output/build/$basefolder/${i}/res/
+cp -rf /home/miuiandroid/public_html/rom-dev/output/build/$xmlsource/${i}/smali/* /home/miuiandroid/public_html/rom-dev/output/build/$basefolder/${i}/smali/
+fi
+
+echo Copying resource files and smali to ${i} please wait...
+sleep 1
+		    done			
+echo Now ready to rebuild apk files
+
+for apk in "${apklist[@]}"
+                do
+                 apktool b /home/miuiandroid/public_html/rom-dev/output/build/$basefolder/${apk} #> /dev/null 2>&1
+                echo Compiling ${apk}
+                done
+for apksource in "${apklist[@]}"
+  do
+    destfolder="$device"_"$release"_apks
+	if [ ${apksource} == "AccountAndSyncSettings.apk" ]
+		then echo Adding resources.arsc to AccountAndSyncSettings.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/AccountAndSyncSettings.apk/build/apk/
+		7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/AccountAndSyncSettings.apk resources.arsc
+
+        elif [ ${apksource} == "AntiSpam.apk" ]
+        then echo Adding resources.arsc to AntiSpam.apk...
+                cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/AntiSpam.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/AntiSpam.apk resources.arsc
+
+
+	elif [ ${apksource} == "Backup.apk" ]
+		then echo Adding resources.arsc to Backup.apk...
+
+	    cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/Backup.apk/build/apk/
+		7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Backup.apk resources.arsc 
+
+        elif [ ${apksource} == "Browser.apk" ]
+        then echo Adding resources.arsc to Browser.apk...
+                cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/Browser.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Browser.apk resources.arsc
+
+
+	elif [ ${apksource} == "CloudService.apk" ]
+        then echo Adding resources.arsc to CloudService.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/CloudService.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/CloudService.apk resources.arsc
+
+    elif [ ${apksource} == "Contacts.apk" ]
+        then echo Adding resources.arsc and drawable-en-hdpi-finger to Contacts.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/Contacts.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Contacts.apk resources.arsc
+	    7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Contacts.apk res/drawable-en-hdpi-finger/
+
+    elif [ ${apksource} == "ContactsProvider.apk" ]
+        then echo Adding resources.arsc to ContactsProvider.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/ContactsProvider.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/ContactsProvider.apk resources.arsc
+
+    elif [ ${apksource} == "DownloadProviderUi.apk" ]
+        then echo Adding resources.arsc to DownloadProviderUi.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/DownloadProviderUi.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/DownloadProviderUi.apk resources.arsc
+
+    elif [ ${apksource} == "FileExplorer.apk" ]
+        then echo Adding resources.arsc and classes.dex to FileExplorer.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/FileExplorer.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/FileExplorer.apk resources.arsc classes.dex
+
+    elif [ ${apksource} == "FM.apk" ]
+        then echo Adding resources.arsc to FM.apk...
+                cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/FM.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/FM.apk resources.arsc
+
+    elif [ ${apksource} == "framework-res.apk" ]
+        then echo Adding resources.arsc and drawable-en-hdpi to framework-res.apk...
+		cd  /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/framework-res.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/framework-res.apk resources.arsc 
+	7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/framework-res.apk res/drawable-en-hdpi/
+
+    elif [ ${apksource} == "Gallery.apk" ]
+        then echo Adding resources.arsc and menu-en to Gallery.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/Gallery.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Gallery.apk resources.arsc
+	    7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Gallery.apk res/menu-en/
+		
+    elif [ ${apksource} == "Launcher2.apk" ]
+        then echo Adding resources.arsc, drawable-en-hdpi and xml-en to Launcher2.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/Launcher2.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Launcher2.apk resources.arsc 
+	    7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Launcher2.apk res/drawable-en-hdpi/ 
+	    7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Launcher2.apk res/xml-en/
+
+    elif [ ${apksource} == "MiuiCamera.apk" ]
+        then echo Adding resources.arsc to MiuiCamera.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/MiuiCamera.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/MiuiCamera.apk resources.arsc
+
+    elif [ ${apksource} == "MiuiMusic.apk" ]
+        then echo Adding resources.arsc, classes.dex, layout-en and drawable-en-hdpi to MiuiMusic.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/MiuiMusic.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/MiuiMusic.apk resources.arsc 
+		7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/MiuiMusic.apk classes.dex
+		7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/MiuiMusic.apk res/layout-en/
+		7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/MiuiMusic.apk res/drawable-en-hdpi/
+
+    elif [ ${apksource} == "Mms.apk" ]
+        then echo Adding resources.arsc, classes.dex, drawable-en-hdpi, raw-en and mms_config.xml to Mms.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/Mms.apk/build/apk/
+		7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Mms.apk resources.arsc 
+		7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Mms.apk classes.dex
+		7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Mms.apk res/drawable-en-hdpi/ 
+		7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Mms.apk res/raw-en/
+		7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Mms.apk res/xml/mms_config.xml
+
+    elif [ ${apksource} == "Monitor.apk" ]
+        then echo Adding resources.arsc to Monitor.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/Monitor.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Monitor.apk resources.arsc
+
+    elif [ ${apksource} == "Notes.apk" ]
+        then echo Adding resources.arsc, drawable-en-hdpi and raw-en to Notes.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/Notes.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Notes.apk resources.arsc
+		7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Notes.apk res/drawable-en-hdpi/ 
+		7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Notes.apk res/raw-en/
+
+    elif [ ${apksource} == "Phone.apk" ]
+        then echo Adding resources.arsc to Phone.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/Phone.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Phone.apk resources.arsc
+
+    elif [ ${apksource} == "Settings.apk" ]
+        then echo Adding resources.arsc, drawable-en-hdpi and layout-en to Settings.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/Settings.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Settings.apk resources.arsc
+		7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Settings.apk res/drawable-en-hdpi/ 
+		7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Settings.apk res/layout-en/
+
+    elif [ ${apksource} == "SettingsProvider.apk" ]
+        then echo Adding resources.arsc to SettingsProvider.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/SettingsProvider.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/SettingsProvider.apk resources.arsc
+
+    elif [ ${apksource} == "SideKick.apk" ]
+        then echo Adding resources.arsc to SideKick.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/SideKick.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/SideKick.apk resources.arsc
+
+    elif [ ${apksource} == "SoundRecorder.apk" ]
+        then echo Adding resources.arsc to SoundRecorder.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/SoundRecorder.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/SoundRecorder.apk resources.arsc
+
+    elif [ ${apksource} == "Superuser.apk" ]
+        then echo Adding resources.arsc to Superuser.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/Superuser.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Superuser.apk resources.arsc
+
+    elif [ ${apksource} == "SystemUI.apk" ]
+        then echo Adding resources.arsc to SystemUI.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/SystemUI.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/SystemUI.apk resources.arsc
+    
+	elif [ ${apksource} == "TelephonyProvider.apk" ]
+        then echo Adding resources.arsc to TelephonyProvider.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/TelephonyProvider.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/TelephonyProvider.apk resources.arsc
+
+    elif [ ${apksource} == "TelocationProvider.apk" ]
+        then echo Adding resources.arsc to TelocationProvider.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/TelocationProvider.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/TelocationProvider.apk resources.arsc
+
+    elif [ ${apksource} == "ThemeManager.apk" ]
+        then echo Adding resources.arsc, drawable-en-hdpi and raw-en to ThemeManager.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/ThemeManager.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/ThemeManager.apk resources.arsc
+		7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/ThemeManager.apk res/drawable-en-hdpi/ 
+		7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/ThemeManager.apk res/raw-en/
+
+    elif [ ${apksource} == "Torch.apk" ]
+        then echo Adding resources.arsc to Torch.apk...
+		cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/Torch.apk/build/apk/
+        7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Torch.apk resources.arsc	
+
+    elif [ ${apksource} == "Updater.apk" ]
+        then echo Adding resources.arsc and classes.dex to Updater.apk...
+                cd /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_files/Updater.apk/build/apk/
+        7za u -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Updater.apk resources.arsc
+	7za a -mx0 -tzip /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Updater.apk classes.dex
+	7za a -mx0 -tzip -r /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/Updater.apk res/drawable-en-hdpi/
+
+    fi
+  done
+
+# OTA MOD - MLH 18/08/2011
+cd /home/miuiandroid/public_html/ota/"$release"/
+
+# Example: miuiandroid_NS-1.8.17.zip
+unzip miuiandroid_"$device"-"$release".zip
+
+rm -f unzip miuiandroid_"$device"-"$release".zip
+
+echo Fixing deodex epic fail!
+rm -f /home/miuiandroid/public_html/ota/"$release"/system/app/Vending.apk
+rm -f /home/miuiandroid/public_html/ota/"$release"/system/app/Vending.odex
+rm -f /home/miuiandroid/public_html/ota/"$release"/system/app/AppShare.apk
+rm -f /home/miuiandroid/public_html/ota/"$release"/system/app/SuperMarket.apk
+
+cp /home/miuiandroid/public_html/rom-dev/Vending.apk /home/miuiandroid/public_html/ota/"$release"/system/app/
+
+# Copy the system apps to the DEVICE_rom/system/app folder
+for copyapps in "${apklist[@]}"
+		    do
+cp -ar /home/miuiandroid/public_html/rom-dev/output/build/"$device"_"$release"_apks/${copyapps} /home/miuiandroid/public_html/ota/"$release"/system/app/
+echo Adding modified "${copyapps}" files to "$device" please wait...
+                     done
+
+echo Moving framework to correct folder
+mv /home/miuiandroid/public_html/ota/"$release"/system/app/framework-res.apk /home/miuiandroid/public_html/ota/"$release"/system/framework/
+
+echo Copying overlay support files from rom-dev repo to ota source
+cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/build.prop /home/miuiandroid/public_html/ota/"$release"/system/
+
+echo Adding bootanimation from MIUIAndroid to OTA ROM
+cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/media/bootanimation.zip /home/miuiandroid/public_html/ota/"$release"/system/media/
+cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/media/theme/*.mtz /home/miuiandroid/public_html/ota/"$release"/system/media/theme/
+echo Adding OTA support files to fix GPS / Telocation
+cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/etc/gps.conf /home/miuiandroid/public_html/ota/"$release"/system/etc/
+cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/etc/telocation.db /home/miuiandroid/public_html/ota/"$release"/system/etc/
+
+echo Adding OTA support files to OTA ROM
+cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/xbin/ota /home/miuiandroid/public_html/ota/"$release"/system/xbin/
+cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/xbin/amonraota /home/miuiandroid/public_html/ota/"$release"/system/xbin/
+cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/xbin/cwmota /home/miuiandroid/public_html/ota/"$release"/system/xbin/
+cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/xbin/twrpota /home/miuiandroid/public_html/ota/"$release"/system/xbin/
+
+echo Copying other English support files to OTA ROM
+cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/app/LatinIME.apk /home/miuiandroid/public_html/ota/"$release"/system/app/
+cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/app/MediaUploader.apk /home/miuiandroid/public_html/ota/"$release"/system/app/
+cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/app/miliao.apk /home/miuiandroid/public_html/ota/"$release"/system/app/
+cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/app/MIUIStats.apk /home/miuiandroid/public_html/ota/"$release"/system/app/
+
+if [ $device == "Optimus2x" ]
+	then
+		cp -ar /home/miuiandroid/public_html/rom-dev/"$device"_rom/system/lib/hw/lights.p990.so /home/miuiandroid/public_html/ota/"$release"/system/lib/hw/
+fi
+
+# Now we can zip and sign the file
+echo Preparing to zip "$device" into an update.zip, please wait...
+
+# Conditional checkpoint for other devices e.g. Defy, I9000, Captivate and HD2
+
+if [ $device == "Defy" ]
+	then
+		zip -r update.zip boot.img devtree.img logo.img META-INF system
+
+elif [ $device == "Captivate" ]
+	then
+		zip -r update.zip bml_over_mtd bml_over_mtd.sh boot.img busybox erase_image flash_image make_ext4fs META-INF modem.bin system updater.sh
+
+elif [ $device == "mione" ]
+	then
+		zip -r update.zip tz.mbn sbl3.mbn sbl2.mbn sbl1.mbn rpm.mbn NON-HLOS.bin boot.img recovery system META-INF
+
+elif [ $device == "I9000" ]
+	then
+		zip -r update.zip bml_over_mtd bml_over_mtd.sh boot.img busybox erase_image flash_image make_ext4fs META-INF modem.bin system updater.sh
+
+elif [ $device == "HD2" ]
+	then
+		zip -r update.zip boot META-INF system
+
+elif [ $device == "Vibrant" ]
+	then
+		zip -r update.zip bml_over_mtd bml_over_mtd.sh boot.img busybox erase_image flash_image make_ext4fs META-INF modem.bin system updater.sh
+else
+		zip -r update.zip boot.img META-INF system
+fi
+
+echo Signing "$device" OTA to repository
+
+java -jar /home/miuiandroid/public_html/rom-dev/signapk.jar -w /home/miuiandroid/public_html/rom-dev/testkey.x509.pem /home/miuiandroid/public_html/rom-dev/testkey.pk8 update.zip miuiandroid_"$device"-"$release".zip
+
+echo Removing update.zip, ready to build next OTA 
+
+if [ $device == "Defy" ]
+        then
+	rm -f update.zip
+	rm -f boot.img
+	rm -f logo.img
+	rm -f devtree.img
+	rm -rf META-INF
+	rm -rf system
+
+elif [ $device == "Captivate" ]
+	then
+	rm -f update.zip
+	rm -f bml_over_mtd 
+	rm -f bml_over_mtd.sh 
+	rm -f boot.img 
+	rm -f busybox 
+	rm -f erase_image
+	rm -f flash_image
+	rm -f make_ext4fs 
+	rm -rf META-INF 
+	rm -f modem.bin 
+	rm -rf system 
+	rm -f updater.sh
+
+elif [ $device == "mione" ]
+	then
+	rm -f update.zip
+	rm -f tz.mbn 
+	rm -f sbl3.mbn 
+	rm -f sbl2.mbn 
+	rm -f sbl1.mbn 
+	rm -f rpm.mbn 
+	rm -f NON-HLOS.bin 
+	rm -f boot.img
+	rm -rf recovery 
+	rm -rf system 
+	rm -rf META-INF
+
+elif [ $device == "I9000" ]
+        then
+        rm -f update.zip
+        rm -f bml_over_mtd
+        rm -f bml_over_mtd.sh
+        rm -f boot.img
+        rm -f busybox
+        rm -f erase_image
+        rm -f flash_image
+        rm -f make_ext4fs
+        rm -rf META-INF
+        rm -f modem.bin
+        rm -rf system
+        rm -f updater.sh
+
+elif [ $device == "Vibrant" ]
+        then
+        rm -f update.zip
+        rm -f bml_over_mtd
+        rm -f bml_over_mtd.sh
+        rm -f boot.img
+        rm -f busybox
+        rm -f erase_image
+        rm -f flash_image
+        rm -f make_ext4fs
+        rm -rf META-INF
+        rm -f modem.bin
+        rm -rf system
+	rm -f updater.sh
+
+elif [ $device == "HD2" ]
+	then
+	rm -f update.zip
+	rm -rf boot 
+	rm -rf META-INF
+	rm -rf system
+
+else
+	rm -f update.zip
+	rm -rf META-INF
+	rm -rf system
+	rm -f boot.img
+fi
+
+# Run the PHP updater to make ROM active in Updater.apk OTA notifications
+/usr/bin/php /home/miuiandroid/public_html/ota/update_ota_database.php

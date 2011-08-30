@@ -1,0 +1,177 @@
+#!/bin/bash
+
+echo "#########################################################"
+echo     Loading script by MIUIAndroid.com
+echo 	 This will decompile and extract apks 
+echo "#########################################################"
+
+echo Unzipping required files for MIUI translations.....
+
+device=$1
+release=$2
+
+# Optimise the packager to deal with the apks for each device properly so we can reduce FC errors on compiles
+
+if [ $device == "N1" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk FM.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk 
+Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk)
+
+elif [ $device == "HD2" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk FM.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk 
+Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk)
+
+elif [ $device == "Defy" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk FM.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk 
+Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk)
+
+elif [ $device == "Desire" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk FM.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk 
+Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk)
+
+elif [ $device == "DHD" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk FM.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk 
+Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk)
+
+elif [ $device == "DesireZ" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk FM.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk 
+Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk)
+
+elif [ $device == "Captivate" ] # (no torch)
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Updater.apk)
+
+elif [ $device == "I9000" ] # (no torch)
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Updater.apk)
+
+elif [ $device == "Milestone" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk)
+
+elif [ $device == "NS" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk)
+
+elif [ $device == "Optimus2x" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk)
+
+elif [ $device == "mione" ]
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk)
+
+
+elif [ $device == "Vibrant" ] # (no torch)
+then
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk
+DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk
+Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk SoundRecorder.apk SystemUI.apk
+TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Updater.apk)
+
+fi
+
+framework=(framework-res.apk)
+working_folder="$device"_"$release"
+basefolder="$working_folder"_apks
+apkfolder=$(pwd)/"$working_folder"_files
+
+echo Making folder to output apks
+mkdir -p "$working_folder"_apks
+
+echo Extracting app folder apks...
+echo
+echo working with  miuiandroid_$device-$release.zip
+echo 
+echo 
+
+#for each apk unzip...
+
+for i in "${apklist[@]}"
+		do
+		unzip -j /home/miuiandroid/public_html/ota/"$release"/miuiandroid_$device-$release.zip system/app/${i} -d "$working_folder"_apks #> /dev/null
+		echo unzipping ${i}
+		done
+		
+for i in "${framework[@]}"
+		do 
+		unzip -j /home/miuiandroid/public_html/ota/"$release"/miuiandroid_$device-$release.zip system/framework/${i} -d "$working_folder"_apks > /dev/null 
+		echo unzipping ${i}
+		sleep 2
+		done
+		
+#end for
+
+echo Installing framework-res.apk
+apktool if "$working_folder"_apks/framework-res.apk
+
+echo framework-res installed.
+
+sleep 1
+
+echo Decompiling each apk in system/app
+for apk in "${apklist[@]}"
+		do
+		apktool d $basefolder/${apk} $apkfolder/${apk} #> /dev/null 2>&1
+		echo Decompiling ${apk}
+		done
+		
+for frame in "${framework[@]}"
+		do 
+		apktool d $basefolder/${frame} $apkfolder/${frame}
+		echo decompiling ${frame}
+		done

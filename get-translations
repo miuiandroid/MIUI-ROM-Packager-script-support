@@ -1,0 +1,122 @@
+#!/bin/bash
+# Script done by MarkHUK 
+#####################################################################
+
+echo "#########################################################"
+echo 	 This will decompile and extract apks 
+echo "#########################################################"
+
+echo Unzipping required files for MIUI translations.....
+
+device=$1
+release=$2
+
+apklist=(AccountAndSyncSettings.apk AntiSpam.apk Backup.apk Browser.apk Contacts.apk ContactsProvider.apk CloudService.apk DownloadProviderUi.apk FileExplorer.apk Gallery.apk Launcher2.apk MiuiCamera.apk MiuiMusic.apk Mms.apk Monitor.apk Notes.apk Phone.apk Settings.apk SettingsProvider.apk SideKick.apk Superuser.apk 
+SoundRecorder.apk SystemUI.apk TelephonyProvider.apk TelocationProvider.apk ThemeManager.apk Torch.apk Updater.apk)
+
+framework=(framework-res.apk)
+working_folder="translation_sources"
+basefolder="$working_folder"/apks
+apkfolder=$(pwd)/"$working_folder"
+
+echo Making folder to output apks
+mkdir -p "$working_folder"/apks
+
+echo Extracting app folder apks...
+echo
+echo working with  miuiandroid_$device-$release.zip
+echo 
+echo 
+
+#for each apk unzip...
+
+for i in "${apklist[@]}"
+		do
+		unzip -j /home/miuiandroid/public_html/rom-dev/output/miuiandroid_$device-$release.zip system/app/${i} -d "$working_folder"/apks #> /dev/null
+		echo unzipping ${i}
+		done
+		
+for i in "${framework[@]}"
+		do 
+		unzip -j /home/miuiandroid/public_html/rom-dev/output/miuiandroid_$device-$release.zip system/framework/${i} -d "$working_folder"/apks > /dev/null 
+		echo unzipping ${i}
+		sleep 2
+		done
+		
+#end for
+
+echo Installing framework-res.apk
+apktool if "$working_folder"/apks/framework-res.apk
+
+echo framework-res installed.
+
+sleep 1
+
+echo Decompiling each apk in system/app
+# for decompile.
+
+for apk in "${apklist[@]}"
+		do
+		apktool d $basefolder/${apk} $apkfolder/${apk} #> /dev/null 2>&1
+		echo Decompiling ${apk}
+		done
+		
+for frame in "${framework[@]}"
+		do 
+		apktool d $basefolder/${frame} $apkfolder/${frame}
+		echo decompiling ${frame}
+		done
+
+echo Removing base folder apks...
+rm -rf $basefolder
+echo Copying resource files to xml_sources folder
+
+for copyfiles in "${apklist[@]}"
+		do
+		
+		# Make target directories
+		mkdir -p /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/res/values/
+		mkdir -p /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/res/values-zh-rTW/
+		mkdir -p /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/res/values-zh-rCN/
+
+# If / Else clauses to copy required smali files to xml_sources repository folder
+    if [ ${copyfiles} == "MiuiMusic.apk" ]
+                then echo copying required small files from MiuiMusic.apk...
+               # do cp commands for smali
+		cp -f /home/miuiandroid/public_html/rom-dev/output/build/translation_sources/${copyfiles}/smali/com/miui/player/MusicUtils.smali /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/smali/com/miui/player/
+		cp -f "/home/miuiandroid/public_html/rom-dev/output/build/translation_sources/${copyfiles}/smali/com/miui/player/R$id.smali" /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/smali/com/miui/player/
+		cp -f /home/miuiandroid/public_html/rom-dev/output/build/translation_sources/${copyfiles}/smali/com/miui/player/ui/MusicBrowserActivity.smali /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/smali/com/miui/player/ui/
+
+    elif [ ${copyfiles} == "Mms.apk" ]
+                then echo copying required small files from Mms.apk...
+               # do cp commands for smali
+		cp -f /home/miuiandroid/public_html/rom-dev/output/build/translation_sources/${copyfiles}/smali/com/android/mms/ui/MmsTabActivity.smali /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/smali/com/android/mms/ui/
+
+    elif [ ${copyfiles} == "Updater.apk" ]
+                then echo copying required small files from Updater.apk...
+               # do cp commands for smali
+		cp -f /home/miuiandroid/public_html/rom-dev/output/build/translation_sources/${copyfiles}/smali/com/android/updater/utils/SysUtils.smali /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/smali/com/android/updater/utils/
+    fi
+
+		
+		# Copy required from from Translation source folder to xml_sources repository folder
+		cp -f /home/miuiandroid/public_html/rom-dev/output/build/translation_sources/${copyfiles}/res/values/strings.xml /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/res/values/strings.xml
+		cp -f /home/miuiandroid/public_html/rom-dev/output/build/translation_sources/${copyfiles}/res/values/arrays.xml /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/res/values/arrays.xml
+		cp -f /home/miuiandroid/public_html/rom-dev/output/build/translation_sources/${copyfiles}/res/values-zh-rTW/strings.xml /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/res/values-zh-rTW/strings.xml
+		cp -f /home/miuiandroid/public_html/rom-dev/output/build/translation_sources/${copyfiles}/res/values-zh-rTW/arrays.xml /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/res/values-zh-rTW/arrays.xml
+		cp -f /home/miuiandroid/public_html/rom-dev/output/build/translation_sources/${copyfiles}/res/values-zh-rCN/strings.xml /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/res/values-zh-rCN/strings.xml
+		cp -f /home/miuiandroid/public_html/rom-dev/output/build/translation_sources/${copyfiles}/res/values-zh-rCN/arrays.xml /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyfiles}/res/values-zh-rCN/arrays.xml
+		sleep 1
+		done
+
+for copyframe in "${framework[@]}"
+		do
+		mkdir -p /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyframe}/res/values/
+		cp -f /home/miuiandroid/public_html/rom-dev/output/build/translation_sources/${copyframe}/res/values/strings.xml /home/miuiandroid/public_html/rom-dev/output/build/xml_sources/${copyframe}/res/values/strings.xml
+		done
+
+echo Removing working folder translation_sources
+rm -rf $working_folder
+
+echo Running sort command on strings.xml in xml_sources
+/usr/bin/python26 /home/miuiandroid/public_html/rom-dev/output/build/sort.py
